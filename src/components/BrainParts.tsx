@@ -15,8 +15,8 @@ const noiseTexture = (() => {
   if (context) {
     const imageData = context.createImageData(512, 512);
     for (let i = 0; i < imageData.data.length; i += 4) {
-      // Very fine, subtle noise
-      const val = 240 + Math.random() * 15; 
+      // More varied noise for a grainier look
+      const val = 150 + Math.random() * 105; 
       imageData.data[i] = val;
       imageData.data[i + 1] = val;
       imageData.data[i + 2] = val;
@@ -27,13 +27,13 @@ const noiseTexture = (() => {
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(12, 12); // High repeat for very fine grain
+  tex.repeat.set(24, 24); // More repeat for finer, denser grain
   return tex;
 })();
 
 // Preload all models
 modelsList.forEach((model) => {
-  useGLTF.preload(`/models/${model}`);
+  useGLTF.preload(`models/${model}`);
 });
 
 export function BrainParts() {
@@ -111,7 +111,7 @@ function BrainPartWrapper({
 }: { 
   url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
 }) {
-  const { scene } = useGLTF(`/models/${url}`);
+  const { scene } = useGLTF(`models/${url}`);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const primitiveRef = useRef<THREE.Object3D>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -190,15 +190,16 @@ function BrainPartWrapper({
             depthWrite: !needsAlpha, // Write to depth buffer when opaque to prevent flickering
           });
         } else {
-          mat = originalMat.clone() as THREE.MeshStandardMaterial;
-          mat.transparent = needsAlpha;
-          mat.depthWrite = !needsAlpha;
+          const standardMat = originalMat.clone() as THREE.MeshStandardMaterial;
+          standardMat.transparent = needsAlpha;
+          standardMat.depthWrite = !needsAlpha;
           
           // Matte Clay / Velvety Bisque finish
-          mat.roughness = 1.0; // Completely non-reflective/Lambertian
-          mat.metalness = 0.0; // No shininess
-          mat.bumpMap = noiseTexture;
-          mat.bumpScale = 0.002; // Very fine grain
+          standardMat.roughness = 1.0; // Completely non-reflective/Lambertian
+          standardMat.metalness = 0.0; // No shininess
+          standardMat.bumpMap = noiseTexture;
+          standardMat.bumpScale = 0.02; // More pronounced grainy look
+          mat = standardMat;
         }
         
         const physMat = mat as THREE.MeshPhysicalMaterial;
@@ -211,10 +212,17 @@ function BrainPartWrapper({
           stdMat.emissive = new THREE.Color('#00ffff');
           stdMat.emissiveIntensity = 2;
           stdMat.wireframe = true;
-        } else if (isSelected || (isHovered && !selectedPart && !xRayMode)) {
+        } else if (isSelected) {
+          stdMat.emissiveIntensity = glassyMode ? 0 : 0.5;
+          stdMat.emissive = new THREE.Color(glassyMode ? '#000000' : '#8b7355'); // Muted brown emissive for solid
+          stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#b8956e'); // Warm tan for solid selected
+          if (glassyMode) physMat.transmission = 0.6;
+          mat.opacity = transparencyLevel < 1 && !isSelected ? transparencyLevel : 1;
+          stdMat.wireframe = false;
+        } else if (isHovered && !selectedPart && !xRayMode) {
           stdMat.emissiveIntensity = 0;
-          stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#c29b57'); // Red for glassy selected, muted gold/soft amber for solid
-          if (glassyMode) physMat.transmission = 0.6; // Slightly more solid when selected
+          stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#c9a882'); // Golden beige for solid hover
+          if (glassyMode) physMat.transmission = 0.6;
           mat.opacity = transparencyLevel < 1 && !isSelected ? transparencyLevel : 1;
           stdMat.wireframe = false;
         } else if (isFaded) {
@@ -226,7 +234,7 @@ function BrainPartWrapper({
         } else {
           if (glassyMode) physMat.transmission = xRayMode ? 0 : 0.9;
           mat.opacity = xRayMode ? 0.2 : transparencyLevel;
-          stdMat.color = new THREE.Color(glassyMode ? '#f5f5f0' : '#e8e0ce'); // Bone white / pale cream for solid unselected
+          stdMat.color = new THREE.Color(glassyMode ? '#f5f5f0' : '#d4c4b0'); // Warm beige for solid base
           stdMat.emissiveIntensity = 0;
           stdMat.wireframe = xRayMode;
         }
