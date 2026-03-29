@@ -1,5 +1,5 @@
 <div align="center">
-<img brainimg.jpeg />
+<img src="brainimg.jpeg" alt="Brain Model" />
 </div>
  Run Locally
  
