@@ -218,13 +218,13 @@ function BrainPartWrapper({
           stdMat.emissiveIntensity = glassyMode ? 0 : 0.5;
           stdMat.emissive = new THREE.Color(glassyMode ? '#000000' : '#8b7355'); // Muted brown emissive for solid
           stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#b8956e'); // Warm tan for solid selected
-          if (glassyMode) physMat.transmission = 0.6;
+          if (glassyMode) physMat.transmission = 0.6 + 0.3 * (1 - transparencyLevel);
           mat.opacity = transparencyLevel < 1 && !isSelected ? transparencyLevel : 1;
           stdMat.wireframe = false;
         } else if (isHovered && !selectedPart && !xRayMode) {
           stdMat.emissiveIntensity = 0;
           stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#c9a882'); // Golden beige for solid hover
-          if (glassyMode) physMat.transmission = 0.6;
+          if (glassyMode) physMat.transmission = 0.6 + 0.3 * (1 - transparencyLevel);
           mat.opacity = transparencyLevel < 1 && !isSelected ? transparencyLevel : 1;
           stdMat.wireframe = false;
         } else if (isFaded) {
@@ -234,7 +234,7 @@ function BrainPartWrapper({
           stdMat.emissiveIntensity = 0;
           stdMat.wireframe = xRayMode;
         } else {
-          if (glassyMode) physMat.transmission = xRayMode ? 0 : 0.9;
+          if (glassyMode) physMat.transmission = xRayMode ? 0 : 0.6 + 0.3 * (1 - transparencyLevel);
           mat.opacity = xRayMode ? 0.2 : transparencyLevel;
           stdMat.color = new THREE.Color(glassyMode ? '#f5f5f0' : '#d4c4b0'); // Warm beige for solid base
           stdMat.emissiveIntensity = 0;

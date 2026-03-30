@@ -29,7 +29,7 @@ const TUTORIAL_STEPS = [
   },
   {
     title: "Glass Effect",
-    description: "The model features a beautiful translucent glass material by default. If it's hard to see or unclear, you can toggle it off using the 'Glass Effect' button in the bottom right corner.",
+    description: "Experience a cooler, more immersive way to visualize the brain. The Glass Effect uses advanced translucent materials to show depth and internal structures. You can toggle this cinematic view in the bottom right corner.",
     position: "bottom"
   },
   {

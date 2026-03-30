@@ -147,7 +147,7 @@ export const useStore = create<AppState>((set) => ({
   setTutorialStep: (step) => set({ tutorialStep: step }),
   isTutorialActive: false,
   setIsTutorialActive: (active) => set({ isTutorialActive: active }),
-  glassyMode: true,
+  glassyMode: false,
   setGlassyMode: (glassy) => set({ glassyMode: glassy }),
 }));
 

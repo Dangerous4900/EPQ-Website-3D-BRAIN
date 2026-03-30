@@ -242,21 +242,23 @@ export function BrainExplorerUI() {
           
           {/* Sliders Panel */}
           <div className="glass-panel p-4 flex flex-col gap-4 mt-2">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-white/70">Transparency</label>
-                <span className="text-xs text-white/50">{Math.round((1 - transparencyLevel) * 100)}%</span>
+            {!glassyMode && (
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-xs text-white/70">Transparency</label>
+                  <span className="text-xs text-white/50">{Math.round((1 - transparencyLevel) * 100)}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="1"
+                  step="0.05"
+                  value={transparencyLevel}
+                  onChange={(e) => setTransparencyLevel(parseFloat(e.target.value))}
+                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                />
               </div>
-              <input
-                type="range"
-                min="0.1"
-                max="1"
-                step="0.05"
-                value={transparencyLevel}
-                onChange={(e) => setTransparencyLevel(parseFloat(e.target.value))}
-                className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
+            )}
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs text-white/70">

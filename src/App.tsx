@@ -3,6 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { useEffect } from 'react';
 import { CanvasContainer } from './components/CanvasContainer';
 import { BrainExplorerUI } from './components/ui/BrainExplorerUI';
