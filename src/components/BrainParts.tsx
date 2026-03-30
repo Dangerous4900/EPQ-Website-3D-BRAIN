@@ -36,7 +36,9 @@ const baseUrl = import.meta.env.BASE_URL;
 const finalBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
 
 modelsList.forEach((model) => {
-  useGLTF.preload(`${finalBaseUrl}models/${model}`);
+  // Use absolute URL construction for preloading
+  const modelUrl = new URL(`models/${model}`, window.location.href).href + '?v=4';
+  useGLTF.preload(modelUrl);
 });
 
 export function BrainParts() {
@@ -114,9 +116,9 @@ function BrainPartWrapper({
 }: { 
   url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
 }) {
-  const baseUrl = import.meta.env.BASE_URL;
-  const finalBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-  const { scene } = useGLTF(`${finalBaseUrl}models/${url}`);
+  // Use absolute URL construction for loading
+  const modelUrl = new URL(`models/${url}`, window.location.href).href + '?v=4';
+  const { scene } = useGLTF(modelUrl);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const primitiveRef = useRef<THREE.Object3D>(null);
   const [isHovered, setIsHovered] = useState(false);
