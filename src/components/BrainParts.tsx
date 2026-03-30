@@ -32,9 +32,11 @@ const noiseTexture = (() => {
 })();
 
 // Preload all models
-const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const baseUrl = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const finalBaseUrl = baseUrl ? (baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`) : '';
+
 modelsList.forEach((model) => {
-  useGLTF.preload(`${baseUrl}models/${model}`);
+  useGLTF.preload(`${finalBaseUrl}models/${model}`);
 });
 
 export function BrainParts() {
@@ -112,8 +114,9 @@ function BrainPartWrapper({
 }: { 
   url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
 }) {
-  const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
-  const { scene } = useGLTF(`${baseUrl}models/${url}`);
+  const baseUrl = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+  const finalBaseUrl = baseUrl ? (baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`) : '';
+  const { scene } = useGLTF(`${finalBaseUrl}models/${url}`);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const primitiveRef = useRef<THREE.Object3D>(null);
   const [isHovered, setIsHovered] = useState(false);

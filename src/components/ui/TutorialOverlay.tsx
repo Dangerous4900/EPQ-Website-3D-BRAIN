@@ -29,7 +29,7 @@ const TUTORIAL_STEPS = [
   },
   {
     title: "Glass Effect",
-    description: "Experience a cooler, more immersive way to visualize the brain. The Glass Effect uses advanced translucent materials to show depth and internal structures. You can toggle this cinematic view in the bottom right corner.",
+    description: "Unlock a cooler, more cinematic way to visualize the brain. The Glass Effect transforms the model into a stunning translucent masterpiece, perfect for seeing depth and internal structures in a way you've never seen before. Toggle this immersive view in the bottom right corner.",
     position: "bottom"
   },
   {
