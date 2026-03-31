@@ -43,8 +43,12 @@ interface AppState {
   setSliceX: (pos: number) => void;
   sliceY: number;
   setSliceY: (pos: number) => void;
-  activeSliceAxis: 'x' | 'y';
-  setActiveSliceAxis: (axis: 'x' | 'y') => void;
+  sliceZ: number;
+  setSliceZ: (pos: number) => void;
+  activeSliceAxis: 'x' | 'y' | 'z' | null;
+  setActiveSliceAxis: (axis: 'x' | 'y' | 'z' | null) => void;
+  cameraView: 'default' | 'coronal' | 'sagittal' | 'horizontal';
+  setCameraView: (view: 'default' | 'coronal' | 'sagittal' | 'horizontal') => void;
   fadeUnselected: boolean;
   setFadeUnselected: (fade: boolean) => void;
   exportTrigger: number;
@@ -92,7 +96,11 @@ export const useStore = create<AppState>((set) => ({
     transparencyLevel: 1.0,
     sliceX: 10,
     sliceY: 10,
-    activeSliceAxis: 'x',
+    sliceZ: 10,
+    activeSliceAxis: null,
+    cameraView: 'default',
+    autoRotate: true,
+    glassyMode: false,
     fadeUnselected: false,
     selectedPart: null,
     focusedPart: null,
@@ -107,24 +115,53 @@ export const useStore = create<AppState>((set) => ({
     }
   })),
   initPartSettings: (ids) => set((state) => {
-    if (Object.keys(state.partSettings).length > 0) return state;
-    
     const customNames: Record<string, string> = {
       '1.1.1.3.0.glb': 'Prefrontal Cortex',
       '1.1.1.4.0.glb': 'Premotor Cortex',
-      '1.1.1.5.1.glb': 'Precentral Gyrus',
-      '1.1.2.1.1.glb': 'Postcentral Gyrus',
+      '1.1.1.5.1.glb': 'Precentral Gyrus (Motor Cortex)',
+      '1.1.1.7.0.glb': 'Broca Area',
+      '1.1.1.8.0.glb': 'Orbitofrontal Cortex',
+      '1.1.2.1.1.glb': 'Postcentral Gyrus (Sensory Cortex)',
       '1.1.2.0.0.glb': 'Parietal Lobe',
-      '1.1.3.0.0.glb': 'Occipital Lobe',
+      '1.1.3.0.0.glb': 'Occipital Lobe (Visual Cortex)',
+      '1.1.4.0.0.glb': 'Temporal Lobe',
+      '1.1.4.6.0.glb': 'Wernicke Area',
+      '1.1.5.0.0.glb': 'Insular Cortex',
+      '1.1.5.1.0.glb': 'Cingulate Gyrus',
+      '1.1.5.3.1.glb': 'Hippocampus',
+      '1.1.5.3.2.glb': 'Amygdala',
+      '2.1.0.0.0.glb': 'Cerebellum (Left)',
+      '2.1.1.0.0.glb': 'Cerebellum (Right)',
+      '3.1.1.0.0.glb': 'Midbrain',
+      '3.1.2.0.0.glb': 'Pons',
+      '3.2.0.0.0.glb': 'Medulla Oblongata',
+      '4.1.0.0.0.glb': 'Thalamus (Left)',
+      '4.1.1.0.0.glb': 'Thalamus (Right)',
+      '4.2.0.0.0.glb': 'Hypothalamus',
+      '5.1.0.0.0.glb': 'Caudate Nucleus',
+      '5.2.0.0.0.glb': 'Putamen',
+      '5.3.0.0.0.glb': 'Globus Pallidus',
+      '7.1.1.0.0.glb': 'Lateral Ventricle (Left)',
+      '7.1.2.0.0.glb': 'Lateral Ventricle (Right)',
+      '7.2.1.0.0.glb': 'Third Ventricle',
+      '7.3.0.0.0.glb': 'Fourth Ventricle',
+      '9.1.0.0.0.glb': 'Corpus Callosum',
     };
 
-    const newSettings: Record<string, PartSetting> = {};
+    const newSettings = { ...state.partSettings };
+    let changed = false;
+
     ids.forEach(id => {
-      newSettings[id] = { 
-        customName: customNames[id] || id.replace('.glb', ''), 
-        visible: id !== '1.1.5.0.0.glb' 
-      };
+      if (!newSettings[id]) {
+        newSettings[id] = { 
+          customName: customNames[id] || id.replace('.glb', ''), 
+          visible: id !== '1.1.5.0.0.glb' 
+        };
+        changed = true;
+      }
     });
+
+    if (!changed) return state;
     return { partSettings: newSettings };
   }),
   isPartsListOpen: false,
@@ -135,8 +172,12 @@ export const useStore = create<AppState>((set) => ({
   setSliceX: (pos) => set({ sliceX: pos }),
   sliceY: 10,
   setSliceY: (pos) => set({ sliceY: pos }),
-  activeSliceAxis: 'x',
+  sliceZ: 10,
+  setSliceZ: (pos) => set({ sliceZ: pos }),
+  activeSliceAxis: null,
   setActiveSliceAxis: (axis) => set({ activeSliceAxis: axis }),
+  cameraView: 'default',
+  setCameraView: (view) => set({ cameraView: view }),
   fadeUnselected: false,
   setFadeUnselected: (fade) => set({ fadeUnselected: fade }),
   exportTrigger: 0,

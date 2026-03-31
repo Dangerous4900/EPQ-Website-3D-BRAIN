@@ -7,13 +7,35 @@ import { useStore } from '../store/useStore';
 
 function CameraController() {
   const cameraControlsRef = useRef<CameraControls>(null);
-  const { resetCameraTrigger } = useStore();
+  const { resetCameraTrigger, cameraView, setAutoRotate } = useStore();
 
   useEffect(() => {
     if (cameraControlsRef.current && resetCameraTrigger > 0) {
       cameraControlsRef.current.setLookAt(0, 0, 20, 0, 0, 0, true);
     }
   }, [resetCameraTrigger]);
+
+  useEffect(() => {
+    if (cameraControlsRef.current) {
+      switch (cameraView) {
+        case 'coronal':
+          cameraControlsRef.current.setLookAt(0, 0, 20, 0, 0, 0, true);
+          setAutoRotate(false);
+          break;
+        case 'sagittal':
+          cameraControlsRef.current.setLookAt(20, 0, 0, 0, 0, 0, true);
+          setAutoRotate(false);
+          break;
+        case 'horizontal':
+          cameraControlsRef.current.setLookAt(0, 20, 0, 0, 0, 0, true);
+          setAutoRotate(false);
+          break;
+        case 'default':
+          // Don't force a position on default unless reset is triggered
+          break;
+      }
+    }
+  }, [cameraView, setAutoRotate]);
 
   return (
     <CameraControls 

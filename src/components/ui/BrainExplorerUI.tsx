@@ -61,7 +61,9 @@ export function BrainExplorerUI() {
     transparencyLevel, setTransparencyLevel,
     sliceX, setSliceX,
     sliceY, setSliceY,
+    sliceZ, setSliceZ,
     activeSliceAxis, setActiveSliceAxis,
+    cameraView, setCameraView,
     fadeUnselected, setFadeUnselected,
     glassyMode, setGlassyMode,
     triggerExport
@@ -262,37 +264,78 @@ export function BrainExplorerUI() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs text-white/70">
-                  Cross Section ({activeSliceAxis === 'x' ? 'Side to Side' : 'Up to Down'})
+                  Slice Plane ({!activeSliceAxis ? 'None' : activeSliceAxis === 'x' ? 'Sagittal' : activeSliceAxis === 'y' ? 'Horizontal' : 'Coronal'})
                 </label>
                 <span className="text-xs text-white/50">
-                  {activeSliceAxis === 'x' ? (sliceX < 10 ? 'Active' : 'Off') : (sliceY < 10 ? 'Active' : 'Off')}
+                  {!activeSliceAxis ? 'Off' : 
+                   activeSliceAxis === 'x' ? (sliceX < 10 ? 'Active' : 'Ready') : 
+                   activeSliceAxis === 'y' ? (sliceY < 10 ? 'Active' : 'Ready') : 
+                   (sliceZ < 10 ? 'Active' : 'Ready')}
                 </span>
               </div>
-              <input
-                type="range"
-                min="-10"
-                max="10"
-                step="0.1"
-                value={activeSliceAxis === 'x' ? sliceX : sliceY}
-                onChange={(e) => {
-                  const val = parseFloat(e.target.value);
-                  if (activeSliceAxis === 'x') setSliceX(val);
-                  else setSliceY(val);
-                }}
-                className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer mb-3"
-              />
-              <div className="flex gap-2">
+              
+              {activeSliceAxis && (
+                <input
+                  type="range"
+                  min="-10"
+                  max="10"
+                  step="0.1"
+                  value={activeSliceAxis === 'x' ? sliceX : activeSliceAxis === 'y' ? sliceY : sliceZ}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    if (activeSliceAxis === 'x') setSliceX(val);
+                    else if (activeSliceAxis === 'y') setSliceY(val);
+                    else setSliceZ(val);
+                  }}
+                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer mb-3"
+                />
+              )}
+
+              <div className="flex flex-wrap gap-2">
                 <button 
-                  onClick={() => setActiveSliceAxis('x')}
-                  className={`flex-1 py-1.5 text-xs rounded transition-colors ${activeSliceAxis === 'x' ? 'bg-white/20 text-white' : 'bg-black/20 text-white/50 hover:bg-white/10'}`}
+                  onClick={() => {
+                    if (activeSliceAxis === 'x') {
+                      setActiveSliceAxis(null);
+                      setCameraView('default');
+                    } else {
+                      setActiveSliceAxis('x');
+                      setCameraView('sagittal');
+                      setSliceX(10);
+                    }
+                  }}
+                  className={`flex-1 py-1.5 text-[10px] uppercase tracking-wider rounded transition-colors ${activeSliceAxis === 'x' ? 'bg-white/20 text-white' : 'bg-black/20 text-white/50 hover:bg-white/10'}`}
                 >
-                  X-Axis
+                  Sagittal
                 </button>
                 <button 
-                  onClick={() => setActiveSliceAxis('y')}
-                  className={`flex-1 py-1.5 text-xs rounded transition-colors ${activeSliceAxis === 'y' ? 'bg-white/20 text-white' : 'bg-black/20 text-white/50 hover:bg-white/10'}`}
+                  onClick={() => {
+                    if (activeSliceAxis === 'y') {
+                      setActiveSliceAxis(null);
+                      setCameraView('default');
+                    } else {
+                      setActiveSliceAxis('y');
+                      setCameraView('horizontal');
+                      setSliceY(10);
+                    }
+                  }}
+                  className={`flex-1 py-1.5 text-[10px] uppercase tracking-wider rounded transition-colors ${activeSliceAxis === 'y' ? 'bg-white/20 text-white' : 'bg-black/20 text-white/50 hover:bg-white/10'}`}
                 >
-                  Y-Axis
+                  Horizontal
+                </button>
+                <button 
+                  onClick={() => {
+                    if (activeSliceAxis === 'z') {
+                      setActiveSliceAxis(null);
+                      setCameraView('default');
+                    } else {
+                      setActiveSliceAxis('z');
+                      setCameraView('coronal');
+                      setSliceZ(10);
+                    }
+                  }}
+                  className={`flex-1 py-1.5 text-[10px] uppercase tracking-wider rounded transition-colors ${activeSliceAxis === 'z' ? 'bg-white/20 text-white' : 'bg-black/20 text-white/50 hover:bg-white/10'}`}
+                >
+                  Coronal
                 </button>
               </div>
             </div>
@@ -478,15 +521,15 @@ export function BrainExplorerUI() {
         )}
       </AnimatePresence>
 
-      {/* Glassy Mode Toggle (Bottom Right) */}
+      {/* Metal Mode Toggle (Bottom Right) */}
       <div className="absolute bottom-6 right-6 md:right-12 pointer-events-auto z-50">
         <button
           onClick={() => setGlassyMode(!glassyMode)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full glass-panel border transition-all duration-300 ${glassyMode ? 'border-amber-400/50 text-amber-100 shadow-[0_0_15px_rgba(251,191,36,0.2)]' : 'border-white/10 text-white/60 hover:text-white hover:border-white/30'}`}
-          title="Toggle Glassy Effect"
+          title="Toggle Metal Effect"
         >
           <Sparkles size={16} className={glassyMode ? 'text-amber-400' : ''} />
-          <span className="text-sm font-medium">Glass Effect</span>
+          <span className="text-sm font-medium">Metal Effect</span>
         </button>
       </div>
     </div>

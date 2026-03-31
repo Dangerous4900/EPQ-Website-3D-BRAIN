@@ -42,7 +42,7 @@ modelsList.forEach((model) => {
 });
 
 export function BrainParts() {
-  const { selectedPart, focusedPart, setSelectedPart, searchQuery, xRayMode, isDissected, partSettings, initPartSettings, exportTrigger, fadeUnselected, transparencyLevel, sliceX, sliceY, glassyMode } = useStore();
+  const { selectedPart, focusedPart, setSelectedPart, searchQuery, xRayMode, isDissected, partSettings, initPartSettings, exportTrigger, fadeUnselected, transparencyLevel, sliceX, sliceY, sliceZ, glassyMode } = useStore();
   const groupRef = useRef<THREE.Group>(null);
 
   useEffect(() => {
@@ -100,6 +100,7 @@ export function BrainParts() {
             transparencyLevel={transparencyLevel}
             sliceX={sliceX}
             sliceY={sliceY}
+            sliceZ={sliceZ}
             fadeUnselected={fadeUnselected}
             glassyMode={glassyMode}
             customName={settings?.customName || model.replace('.glb', '')}
@@ -112,9 +113,9 @@ export function BrainParts() {
 }
 
 function BrainPartWrapper({ 
-  url, selectedPart, focusedPart, isSearching, query, xRayMode, isDissected, transparencyLevel, sliceX, sliceY, fadeUnselected, glassyMode, customName, onClick 
+  url, selectedPart, focusedPart, isSearching, query, xRayMode, isDissected, transparencyLevel, sliceX, sliceY, sliceZ, fadeUnselected, glassyMode, customName, onClick 
 }: { 
-  url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
+  url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, sliceZ: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
 }) {
   // Use absolute URL construction for loading
   const modelUrl = `${finalBaseUrl}models/${url}?v=9`;
@@ -123,8 +124,9 @@ function BrainPartWrapper({
   const primitiveRef = useRef<THREE.Object3D>(null);
   const [isHovered, setIsHovered] = useState(false);
   
-  const clipPlaneX = useMemo(() => new THREE.Plane(new THREE.Vector3(1, 0, 0), 10), []);
-  const clipPlaneY = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), 10), []);
+  const clipPlaneX = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 10), []);
+  const clipPlaneY = useMemo(() => new THREE.Plane(new THREE.Vector3(0, -1, 0), 10), []);
+  const clipPlaneZ = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, -1), 10), []);
 
   // Calculate center for dissection
   const center = useMemo(() => {
@@ -195,17 +197,46 @@ function BrainPartWrapper({
             clearcoatRoughness: 0.1,
             transparent: needsAlpha,
             depthWrite: !needsAlpha, // Write to depth buffer when opaque to prevent flickering
+            side: THREE.DoubleSide,
           });
+          
+          mat.onBeforeCompile = (shader) => {
+            shader.fragmentShader = shader.fragmentShader.replace(
+              '#include <clipping_planes_fragment>',
+              `
+              #include <clipping_planes_fragment>
+              if (!gl_FrontFacing) {
+                gl_FragColor = vec4(0.15, 0.08, 0.08, 1.0); // Dark "flesh" color for inside
+                return;
+              }
+              `
+            );
+          };
         } else {
           const standardMat = originalMat.clone() as THREE.MeshStandardMaterial;
           standardMat.transparent = needsAlpha;
           standardMat.depthWrite = !needsAlpha;
+          standardMat.side = THREE.DoubleSide;
           
           // Matte Clay / Velvety Bisque finish
           standardMat.roughness = 1.0; // Completely non-reflective/Lambertian
           standardMat.metalness = 0.0; // No shininess
           standardMat.bumpMap = noiseTexture;
           standardMat.bumpScale = 0.02; // More pronounced grainy look
+          
+          standardMat.onBeforeCompile = (shader) => {
+            shader.fragmentShader = shader.fragmentShader.replace(
+              '#include <clipping_planes_fragment>',
+              `
+              #include <clipping_planes_fragment>
+              if (!gl_FrontFacing) {
+                gl_FragColor = vec4(0.15, 0.08, 0.08, 1.0); // Dark "flesh" color for inside
+                return;
+              }
+              `
+            );
+          };
+          
           mat = standardMat;
         }
         
@@ -246,18 +277,19 @@ function BrainPartWrapper({
           stdMat.wireframe = xRayMode;
         }
         
-        mat.clippingPlanes = [clipPlaneX, clipPlaneY];
+        mat.clippingPlanes = [clipPlaneX, clipPlaneY, clipPlaneZ];
         mat.clipShadows = true;
         
         mesh.material = mat;
       }
     });
-  }, [clonedScene, isSelected, isHovered, isFaded, xRayMode, transparencyLevel, customName, clipPlaneX, clipPlaneY, selectedPart, glassyMode]);
+  }, [clonedScene, isSelected, isHovered, isFaded, xRayMode, transparencyLevel, customName, clipPlaneX, clipPlaneY, clipPlaneZ, selectedPart, glassyMode]);
 
   // Animate dissection and update clipping plane
   useFrame((state) => {
     clipPlaneX.constant = sliceX;
     clipPlaneY.constant = sliceY;
+    clipPlaneZ.constant = sliceZ;
     
     if (primitiveRef.current) {
       if (xRayMode && isSelected) {
