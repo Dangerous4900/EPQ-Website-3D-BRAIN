@@ -116,11 +116,14 @@ export const useStore = create<AppState>((set) => ({
   })),
   initPartSettings: (ids) => set((state) => {
     const customNames: Record<string, string> = {
+      '1.1.1.1.1.glb': 'Superior Frontal Gyrus',
+      '1.1.1.1.2.glb': 'Superior Frontal Gyrus',
+      '1.1.1.1.3.glb': 'Superior Frontal Gyrus',
       '1.1.1.3.0.glb': 'Prefrontal Cortex',
       '1.1.1.4.0.glb': 'Premotor Cortex',
       '1.1.1.5.1.glb': 'Precentral Gyrus (Motor Cortex)',
-      '1.1.1.7.0.glb': 'Broca Area',
-      '1.1.1.8.0.glb': 'Orbitofrontal Cortex',
+      '1.1.1.7.0.glb': 'Broca Area (Inferior Frontal Gyrus)',
+      '1.1.1.8.0.glb': 'Orbitofrontal Cortex (Middle Frontal Gyrus)',
       '1.1.2.1.1.glb': 'Postcentral Gyrus (Sensory Cortex)',
       '1.1.2.0.0.glb': 'Parietal Lobe',
       '1.1.3.0.0.glb': 'Occipital Lobe (Visual Cortex)',
@@ -146,6 +149,7 @@ export const useStore = create<AppState>((set) => ({
       '7.2.1.0.0.glb': 'Third Ventricle',
       '7.3.0.0.0.glb': 'Fourth Ventricle',
       '9.1.0.0.0.glb': 'Corpus Callosum',
+      '0.0.0.0.0.glb': 'Brainstem',
     };
 
     const newSettings = { ...state.partSettings };

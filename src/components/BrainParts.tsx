@@ -34,7 +34,7 @@ const noiseTexture = (() => {
 // Preload all models
 modelsList.forEach((model) => {
   // Use absolute path for preloading
-  const modelUrl = `/models/${model}?v=9`;
+  const modelUrl = `/models/${model}`;
   useGLTF.preload(modelUrl);
 });
 
@@ -115,7 +115,7 @@ function BrainPartWrapper({
   url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, sliceZ: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
 }) {
   // Use absolute path for loading
-  const modelUrl = `/models/${url}?v=9`;
+  const modelUrl = `/models/${url}`;
   const { scene } = useGLTF(modelUrl);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const primitiveRef = useRef<THREE.Object3D>(null);
