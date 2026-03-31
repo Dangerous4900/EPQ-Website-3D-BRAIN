@@ -16,11 +16,7 @@
   ],
   "rewrites": [
     {
-      "source": "/models/(.*)",
-      "destination": "/models/$1"
-    },
-    {
-      "source": "/(.*)",
+      "source": "/((?!models/).*)",
       "destination": "/index.html"
     }
   ]
