@@ -37,7 +37,7 @@ const finalBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
 
 modelsList.forEach((model) => {
   // Use absolute URL construction for preloading
-  const modelUrl = new URL(`models/${model}`, window.location.href).href + '?v=4';
+  const modelUrl = `${finalBaseUrl}models/${model}?v=9`;
   useGLTF.preload(modelUrl);
 });
 
@@ -117,7 +117,7 @@ function BrainPartWrapper({
   url: string, selectedPart: string | null, focusedPart: string | null, isSearching: boolean, query: string, xRayMode: boolean, isDissected: boolean, transparencyLevel: number, sliceX: number, sliceY: number, fadeUnselected: boolean, glassyMode: boolean, customName: string, onClick: (id: string) => void 
 }) {
   // Use absolute URL construction for loading
-  const modelUrl = new URL(`models/${url}`, window.location.href).href + '?v=4';
+  const modelUrl = `${finalBaseUrl}models/${url}?v=9`;
   const { scene } = useGLTF(modelUrl);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const primitiveRef = useRef<THREE.Object3D>(null);
