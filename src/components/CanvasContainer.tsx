@@ -47,14 +47,14 @@ function CameraController() {
   );
 }
 
-export function CanvasContainer() {
+export function CanvasContainer({ transparent = false }: { transparent?: boolean }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 20], fov: 45 }}
       gl={{ antialias: true, alpha: true, localClippingEnabled: true }}
       dpr={[1, 2]}
     >
-      <color attach="background" args={['#000000']} />
+      {!transparent && <color attach="background" args={['#000000']} />}
       
       <ambientLight intensity={0.2} />
       <directionalLight position={[10, 10, 5]} intensity={1.5} />
