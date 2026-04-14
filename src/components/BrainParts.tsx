@@ -119,6 +119,7 @@ function BrainPartWrapper({
   const { scene } = useGLTF(modelUrl);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const primitiveRef = useRef<THREE.Object3D>(null);
+  const elapsedTimeRef = useRef(0);
   const [isHovered, setIsHovered] = useState(false);
   
   const clipPlaneX = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 10), []);
@@ -185,15 +186,16 @@ function BrainPartWrapper({
           mat = new THREE.MeshPhysicalMaterial({
             map: originalMat.map,
             normalMap: originalMat.normalMap,
-            roughness: 0.15,
-            metalness: 0.9, // Metallic glass
-            transmission: 0.9, // Glass-like transparency
-            ior: 1.5, // Index of refraction for glass
-            thickness: 2.0, // Volume simulation
+            roughness: 0.1,
+            metalness: 1.0, // Full metallic
+            transmission: 0.2, // Fixed transmission for glassy mode
+            ior: 1.5,
+            thickness: 1.0,
             clearcoat: 1.0,
             clearcoatRoughness: 0.1,
+            envMapIntensity: 1.5, // Make reflections stronger
             transparent: needsAlpha,
-            depthWrite: !needsAlpha, // Write to depth buffer when opaque to prevent flickering
+            depthWrite: !needsAlpha, 
             side: THREE.DoubleSide,
           });
           
@@ -251,25 +253,25 @@ function BrainPartWrapper({
           stdMat.emissiveIntensity = glassyMode ? 0 : 0.5;
           stdMat.emissive = new THREE.Color(glassyMode ? '#000000' : '#8b7355'); // Muted brown emissive for solid
           stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#b8956e'); // Warm tan for solid selected
-          if (glassyMode) physMat.transmission = 0.6 + 0.3 * (1 - transparencyLevel);
-          mat.opacity = transparencyLevel < 1 && !isSelected ? transparencyLevel : 1;
+          if (glassyMode) physMat.transmission = 0.1; // Fixed low transmission for visibility
+          mat.opacity = 1;
           stdMat.wireframe = false;
         } else if (isHovered && !selectedPart && !xRayMode) {
           stdMat.emissiveIntensity = 0;
           stdMat.color = new THREE.Color(glassyMode ? '#ff3333' : '#c9a882'); // Golden beige for solid hover
-          if (glassyMode) physMat.transmission = 0.6 + 0.3 * (1 - transparencyLevel);
-          mat.opacity = transparencyLevel < 1 && !isSelected ? transparencyLevel : 1;
+          if (glassyMode) physMat.transmission = 0.1; // Fixed low transmission for visibility
+          mat.opacity = 1;
           stdMat.wireframe = false;
         } else if (isFaded) {
           if (glassyMode) physMat.transmission = 0;
-          mat.opacity = xRayMode ? 0.05 : 0.05;
+          mat.opacity = 0.05;
           stdMat.color = new THREE.Color('#222222');
           stdMat.emissiveIntensity = 0;
           stdMat.wireframe = xRayMode;
         } else {
-          if (glassyMode) physMat.transmission = xRayMode ? 0 : 0.6 + 0.3 * (1 - transparencyLevel);
-          mat.opacity = xRayMode ? 0.2 : transparencyLevel;
-          stdMat.color = new THREE.Color(glassyMode ? '#f5f5f0' : '#d4c4b0'); // Warm beige for solid base
+          if (glassyMode) physMat.transmission = xRayMode ? 0 : 0.2; // Fixed transmission for glassy mode
+          mat.opacity = xRayMode ? 0.2 : (glassyMode ? 1 : transparencyLevel);
+          stdMat.color = new THREE.Color(glassyMode ? '#ffffff' : '#d4c4b0'); // Pure white for glassy base to maximize reflections
           stdMat.emissiveIntensity = 0;
           stdMat.wireframe = xRayMode;
         }
@@ -283,14 +285,15 @@ function BrainPartWrapper({
   }, [clonedScene, isSelected, isHovered, isFaded, xRayMode, transparencyLevel, customName, clipPlaneX, clipPlaneY, clipPlaneZ, selectedPart, glassyMode]);
 
   // Animate dissection and update clipping plane
-  useFrame((state) => {
+  useFrame((state, delta) => {
+    elapsedTimeRef.current += delta;
     clipPlaneX.constant = sliceX;
     clipPlaneY.constant = sliceY;
     clipPlaneZ.constant = sliceZ;
     
     if (primitiveRef.current) {
       if (xRayMode && isSelected) {
-        const time = state.clock.getElapsedTime();
+        const time = elapsedTimeRef.current;
         // Fast, erratic pulsing like electricity
         const pulse = Math.pow(Math.sin(time * 30), 2) * 0.5 + Math.pow(Math.sin(time * 45 + 1), 2) * 0.5;
         primitiveRef.current.traverse((child) => {

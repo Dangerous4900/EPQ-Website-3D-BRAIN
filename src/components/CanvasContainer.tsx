@@ -56,9 +56,9 @@ export function CanvasContainer() {
     >
       <color attach="background" args={['#000000']} />
       
-      <ambientLight intensity={0.05} />
-      <directionalLight position={[10, 10, 5]} intensity={0.5} />
-      <directionalLight position={[-10, -10, -5]} intensity={0.2} />
+      <ambientLight intensity={0.2} />
+      <directionalLight position={[10, 10, 5]} intensity={1.5} />
+      <directionalLight position={[-10, -10, -5]} intensity={0.8} />
       
       <Suspense fallback={null}>
         <BrainModel />
@@ -68,9 +68,9 @@ export function CanvasContainer() {
 
       <EffectComposer enableNormalPass={false}>
         <Bloom 
-          luminanceThreshold={0.6} 
+          luminanceThreshold={0.8} 
           mipmapBlur 
-          intensity={0.4} 
+          intensity={0.2} 
         />
       </EffectComposer>
 
