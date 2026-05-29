@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
+    "dev": "vite",
     "build": "node generateList.cjs && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
@@ -31,6 +31,9 @@
     "three": "^0.183.2",
     "vite": "^6.2.0",
     "zustand": "^5.0.12"
+  },
+  "overrides": {
+    "node-domexception": "file:./node-domexception-mock"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

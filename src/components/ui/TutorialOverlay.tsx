@@ -4,38 +4,53 @@ import { X, ChevronRight, ChevronLeft, Check } from 'lucide-react';
 const TUTORIAL_STEPS = [
   {
     title: "Welcome to Brain Explorer",
-    description: "This interactive 3D model lets you explore the human brain in detail. Let's take a quick tour of the features.",
+    description: "Experience the human brain in interactive 3D. This tutorial will guide you through all the advanced visualization and analysis tools at your disposal.",
     position: "center"
   },
   {
-    title: "Search & Select",
-    description: "Use the search bar at the top to find specific brain regions, or click directly on the 3D model to select a part.",
+    title: "Minimize UI",
+    description: "Want an unobstructed view of the brain? Use the Minimize button in the top right corner to hide all control panels. Click again to Maximize the controls.",
     position: "top"
   },
   {
-    title: "View Controls",
-    description: "Use the toolbar on the left to toggle Auto-Rotate, X-Ray mode, Explode view, or Fade unselected parts.",
+    title: "Navigation & Zoom",
+    description: "Click and drag to rotate the model. Use your mouse wheel or the new Zoom In/Out (+/-) buttons in the toolbar to see fine details or the whole structure.",
     position: "left"
   },
   {
-    title: "Cross Sections",
-    description: "Use the sliders on the left to slice the brain along the X (Side to Side) or Y (Up to Down) axis to see inside.",
+    title: "Neural View: Auto-Rotate & 3D Mesh",
+    description: "Enable Auto-Rotate to spin the model automatically. The 3D Mesh toggle reveals the structural framework of the brain, highlighting the complex neural connections and nervous architecture.",
     position: "left"
   },
   {
-    title: "Parts List",
-    description: "Open the Parts List to toggle the visibility of individual brain regions or rename them.",
+    title: "Visualization: Explode & Fade",
+    description: "Explode View pulls all brain regions apart to reveal hidden spatial relationships. Fade Others dims everything except your selected part to help you focus.",
     position: "left"
   },
   {
-    title: "Glass Effect",
-    description: "Unlock a cooler, more cinematic way to visualize the brain. The Glass Effect transforms the model into a stunning translucent masterpiece, perfect for seeing depth and internal structures in a way you've never seen before. Toggle this immersive view in the bottom right corner.",
+    title: "Cross-Section Slicing",
+    description: "Slice the entire brain using the Sagittal (Side), Horizontal (Top/Bottom), or Coronal (Front/Back) planes. Use the slider to move the cut into the brain's core.",
+    position: "left"
+  },
+  {
+    title: "Parts List Management",
+    description: "The Parts List lets you toggle specific regions on or off. You can also rename parts to customize your view or focus on a specific neural system.",
+    position: "left"
+  },
+  {
+    title: "Parts List & Search",
+    description: "Use the Parts List to find specific neural structures. You can search by name, toggle visibility, and focus your view on individual components.",
+    position: "left"
+  },
+  {
+    title: "Metal & Glass Effect",
+    description: "In the bottom right, toggle the Metal Effect for a high-contrast, cinematic physical material that highlights surface geometry and reflections.",
     position: "bottom"
   },
   {
-    title: "Export",
-    description: "Click the Export button to download the entire brain model as a 3D file (.glb). Note that this exports the full structural model, regardless of your current view or selections.",
-    position: "bottom"
+    title: "3D Export",
+    description: "Download the complete structural model as a GLB file using the Export button. Perfect for use in other 3D software or educational presentations.",
+    position: "left"
   }
 ];
 

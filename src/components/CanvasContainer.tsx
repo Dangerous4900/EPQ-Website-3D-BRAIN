@@ -7,7 +7,19 @@ import { useStore } from '../store/useStore';
 
 function CameraController() {
   const cameraControlsRef = useRef<CameraControls>(null);
-  const { resetCameraTrigger, cameraView, setAutoRotate } = useStore();
+  const { resetCameraTrigger, cameraView, setAutoRotate, zoomInTrigger, zoomOutTrigger } = useStore();
+  
+  useEffect(() => {
+    if (cameraControlsRef.current && zoomInTrigger > 0) {
+      cameraControlsRef.current.dolly(5, true);
+    }
+  }, [zoomInTrigger]);
+
+  useEffect(() => {
+    if (cameraControlsRef.current && zoomOutTrigger > 0) {
+      cameraControlsRef.current.dolly(-5, true);
+    }
+  }, [zoomOutTrigger]);
 
   useEffect(() => {
     if (cameraControlsRef.current && resetCameraTrigger > 0) {
@@ -48,31 +60,37 @@ function CameraController() {
 }
 
 export function CanvasContainer({ transparent = false }: { transparent?: boolean }) {
+  const { glassyMode } = useStore();
+
   return (
     <Canvas
-      camera={{ position: [0, 0, 20], fov: 45 }}
-      gl={{ antialias: true, alpha: true, localClippingEnabled: true }}
-      dpr={[1, 2]}
+      camera={{ position: [0, 0, 20], fov: 45, far: 2000 }}
+      gl={{ 
+        antialias: true, 
+        alpha: true, 
+        localClippingEnabled: true,
+        precision: 'mediump'
+      }}
+      onCreated={({ gl }) => {
+        if (gl && gl.debug) {
+          gl.debug.checkShaderErrors = false;
+        }
+      }}
+      dpr={1}
+      onPointerLeave={() => useStore.getState().setHoveredPart(null)}
     >
+      <fog attach="fog" args={['#000000', 50, 500]} />
       {!transparent && <color attach="background" args={['#000000']} />}
       
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} />
-      <directionalLight position={[-10, -10, -5]} intensity={0.8} />
+      <ambientLight intensity={glassyMode ? 0.35 : 0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={glassyMode ? 2.5 : 1.5} />
+      <directionalLight position={[-10, -10, -5]} intensity={glassyMode ? 1.2 : 0.8} />
       
       <Suspense fallback={null}>
         <BrainModel />
-        <Environment preset="city" />
+        {glassyMode && <Environment preset="studio" />}
         <Preload all />
       </Suspense>
-
-      <EffectComposer enableNormalPass={false}>
-        <Bloom 
-          luminanceThreshold={0.8} 
-          mipmapBlur 
-          intensity={0.2} 
-        />
-      </EffectComposer>
 
       <CameraController />
     </Canvas>

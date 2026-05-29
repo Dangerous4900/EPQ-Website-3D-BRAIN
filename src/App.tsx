@@ -13,10 +13,14 @@ import { CanvasContainer } from './components/CanvasContainer';
 import { BrainExplorerUI } from './components/ui/BrainExplorerUI';
 import { TutorialOverlay } from './components/ui/TutorialOverlay';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { NeuralLoader } from './components/ui/NeuralLoader';
+import { useStore } from './store/useStore';
+import { AnimatePresence } from 'framer-motion';
 
 export default function App() {
   const [isEmbed, setIsEmbed] = useState(false);
   const [isTransparent, setIsTransparent] = useState(false);
+  const { isModelLoaded } = useStore();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -27,6 +31,11 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className={`relative w-full ${isTransparent ? 'bg-transparent' : 'bg-black'} text-white h-screen font-sans overflow-hidden`}>
+        {/* Loading overlay */}
+        <AnimatePresence>
+          {!isModelLoaded && !isTransparent && <NeuralLoader />}
+        </AnimatePresence>
+
         {/* 3D Canvas Background */}
         <div className="absolute inset-0 z-0">
           <CanvasContainer transparent={isTransparent} />
