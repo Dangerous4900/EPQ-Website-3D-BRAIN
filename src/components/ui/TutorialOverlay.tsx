@@ -14,42 +14,42 @@ const TUTORIAL_STEPS = [
   },
   {
     title: "Navigation & Zoom",
-    description: "Click and drag to rotate the model. Use your mouse wheel or the new Zoom In/Out (+/-) buttons in the toolbar to see fine details or the whole structure.",
+    description: "Click and drag to rotate the model. Use your mouse wheel or the Zoom In/Out (+/-) buttons in the toolbar to see fine details or the whole structure.",
     position: "left"
   },
   {
-    title: "Neural View: Auto-Rotate & 3D Mesh",
-    description: "Enable Auto-Rotate to spin the model automatically. The 3D Mesh toggle reveals the structural framework of the brain, highlighting the complex neural connections and nervous architecture.",
+    title: "Auto-Rotate",
+    description: "Enable Auto-Rotate in the left toolbar to automatically spin the model, allowing you to observe the complex 3D topology from every angle hands-free.",
     position: "left"
   },
   {
-    title: "Visualization: Explode & Fade",
-    description: "Explode View pulls all brain regions apart to reveal hidden spatial relationships. Fade Others dims everything except your selected part to help you focus.",
+    title: "Brain Regions Selector",
+    description: "Click the Brain Regions button in the toolbar to open the Regions Selector. You can isolate specific networks (like the Cerebral Cortex or Limbic System) to focus study on related paths.",
+    position: "left"
+  },
+  {
+    title: "Explode & Fade Others",
+    description: "Explode View pulls all brain components apart to reveal internal relations. Fade Others dims unselected components, making the focused structures pop.",
     position: "left"
   },
   {
     title: "Cross-Section Slicing",
-    description: "Slice the entire brain using the Sagittal (Side), Horizontal (Top/Bottom), or Coronal (Front/Back) planes. Use the slider to move the cut into the brain's core.",
+    description: "Slice through the brain along Sagittal, Horizontal, or Coronal planes. Drag the slider to adjust depth, giving you a detailed view inside the brain's solid core.",
     position: "left"
   },
   {
-    title: "Parts List Management",
-    description: "The Parts List lets you toggle specific regions on or off. You can also rename parts to customize your view or focus on a specific neural system.",
+    title: "Anatomical Parts List",
+    description: "Examine every integrated structure in the Parts List. Search by name, toggle visibility, and use the custom Focus button to center and highlight key areas.",
     position: "left"
   },
   {
-    title: "Parts List & Search",
-    description: "Use the Parts List to find specific neural structures. You can search by name, toggle visibility, and focus your view on individual components.",
-    position: "left"
-  },
-  {
-    title: "Metal & Glass Effect",
-    description: "In the bottom right, toggle the Metal Effect for a high-contrast, cinematic physical material that highlights surface geometry and reflections.",
+    title: "Cinematic Metal Effect",
+    description: "On the bottom right, toggle the Metal Effect to instantly transform the brain's appearance with reflective shaders that highlight physical geometry and contours.",
     position: "bottom"
   },
   {
     title: "3D Export",
-    description: "Download the complete structural model as a GLB file using the Export button. Perfect for use in other 3D software or educational presentations.",
+    description: "Ready to share or presentation-ready? Download the interactive model as an industry-standard GLB file with the Export button in the top-left panel.",
     position: "left"
   }
 ];

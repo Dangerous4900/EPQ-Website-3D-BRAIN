@@ -721,48 +721,55 @@ export function BrainExplorerUI() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="w-full max-w-sm pointer-events-auto mt-auto"
+            className="absolute bottom-20 md:bottom-24 right-6 md:right-12 w-80 md:w-96 max-h-[calc(100vh-220px)] md:max-h-[calc(100vh-280px)] pointer-events-auto z-40 flex flex-col"
           >
-            <div className="glass-panel p-6 relative overflow-hidden">
+            <div className="glass-panel p-5 relative overflow-hidden flex flex-col max-h-full">
               {/* Background accent */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-3xl pointer-events-none" />
               
-              <button 
-                onClick={() => setSelectedPart(null)}
-                className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-10"
-              >
-                <X size={18} />
-              </button>
-              
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-white/10 border border-white/20">
-                  <Info size={20} className="text-white" />
+              {/* Header: Title and Close button - Non-scrollable */}
+              <div className="flex items-center justify-between gap-3 mb-4 shrink-0 pr-6 border-b border-white/5 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-white/10 border border-white/20 shrink-0">
+                    <Info size={18} className="text-white" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-serif capitalize text-white truncate max-w-[180px] md:max-w-[240px]" title={partSetting.customName}>
+                    {partSetting.customName}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-serif capitalize">{partSetting.customName}</h3>
+                <button 
+                  onClick={() => setSelectedPart(null)}
+                  className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-10 p-1 rounded-full hover:bg-white/5"
+                >
+                  <X size={18} />
+                </button>
               </div>
               
-              <p className="text-sm text-white/70 leading-relaxed mb-6">
-                {partInfo.description}
-              </p>
+              {/* Content Area - Scrollable */}
+              <div className="flex-1 overflow-y-auto pr-1 space-y-4">
+                <p className="text-xs md:text-sm text-white/70 leading-relaxed">
+                  {partInfo.description}
+                </p>
 
-              {partInfo.mainFunction && (
-                <div className="mb-6 p-3 rounded-lg bg-white/5 border border-white/10">
-                  <h4 className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Main Function</h4>
-                  <p className="text-sm text-white font-medium italic">"{partInfo.mainFunction}"</p>
-                </div>
-              )}
-              
-              <div>
-                <h4 className="text-xs uppercase tracking-widest text-white/40 mb-3">Associated Functions</h4>
-                <div className="flex flex-wrap gap-2">
-                  {partInfo.functions.map((func, i) => (
-                    <span 
-                      key={i} 
-                      className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/80"
-                    >
-                      {func}
-                    </span>
-                  ))}
+                {partInfo.mainFunction && (
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                    <h4 className="text-[10px] uppercase tracking-widest text-white/40 mb-1 font-semibold">Main Function</h4>
+                    <p className="text-xs md:text-sm text-white font-medium italic">"{partInfo.mainFunction}"</p>
+                  </div>
+                )}
+                
+                <div>
+                  <h4 className="text-[10px] md:text-xs uppercase tracking-widest text-white/40 mb-2.5 font-semibold">Associated Functions</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {partInfo.functions.map((func, i) => (
+                      <span 
+                        key={i} 
+                        className="text-[11px] px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 transition-colors"
+                      >
+                        {func}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
