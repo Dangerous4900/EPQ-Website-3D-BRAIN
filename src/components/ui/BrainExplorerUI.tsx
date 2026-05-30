@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Info, RotateCw, Eye, Layers, Focus, List, EyeOff, Droplet, Download, Ghost, AlertTriangle, Sparkles, Plus, Minus, Maximize, Minimize, Box } from 'lucide-react';
 import { useStore, regionsMap } from '../../store/useStore';
@@ -428,14 +428,34 @@ export function BrainExplorerUI() {
   const [partsListSearch, setPartsListSearch] = useState('');
   const [isRegionsOpen, setIsRegionsOpen] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mouseTarget = useRef({ x: 0, y: 0 });
+  const mouseCurrent = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
+    let initialized = false;
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      if (!initialized) {
+        mouseCurrent.current = { x: e.clientX, y: e.clientY };
+        initialized = true;
+      }
+      mouseTarget.current = { x: e.clientX, y: e.clientY };
     };
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    
+    let animFrame: number;
+    const lerp = () => {
+      const ease = 0.12; // buttery delayed glide for elegant hover trailing
+      mouseCurrent.current.x += (mouseTarget.current.x - mouseCurrent.current.x) * ease;
+      mouseCurrent.current.y += (mouseTarget.current.y - mouseCurrent.current.y) * ease;
+      setMousePos({ x: mouseCurrent.current.x, y: mouseCurrent.current.y });
+      animFrame = requestAnimationFrame(lerp);
+    };
+    
+    animFrame = requestAnimationFrame(lerp);
+    
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animFrame);
     };
   }, []);
 
@@ -937,24 +957,40 @@ export function BrainExplorerUI() {
 
       {/* Tooltip on Hover */}
       <AnimatePresence>
-        {hoveredPart && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
-            style={{
-              position: 'fixed',
-              left: mousePos.x + 15,
-              top: mousePos.y + 15,
-            }}
-            className="pointer-events-none z-[100] px-4 py-2.5 glass-panel select-none rounded-xl shadow-[inset_0_1px_3px_rgba(255,255,255,0.25),0_12px_40px_rgba(0,0,0,0.8)] border border-white/25 flex flex-col items-center justify-center backdrop-blur-xl bg-gradient-to-b from-white/10 to-white/5"
-          >
-            <span className="text-xs font-semibold text-white tracking-wide font-sans text-center">
-              {partSettings[hoveredPart]?.customName || hoveredPart.replace('.glb', '').replace(/[\_\.]/g, ' ')}
-            </span>
-          </motion.div>
-        )}
+        {hoveredPart && (() => {
+          const hoveredSetting = partSettings[hoveredPart];
+          const hoveredName = hoveredSetting?.customName || hoveredPart.replace('.glb', '').replace(/[\_\.]/g, ' ');
+          const hoveredInfo = getPartInfo(hoveredName);
+          return (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12 }}
+              style={{
+                position: 'fixed',
+                left: mousePos.x + 20,
+                top: mousePos.y + 20,
+              }}
+              className="pointer-events-none z-[100] px-4 py-3 glass-panel select-none rounded-xl shadow-[inset_0_1px_3px_rgba(255,255,255,0.25),0_12px_40px_rgba(0,0,0,0.85)] border border-white/20 flex flex-col gap-1.5 backdrop-blur-2xl bg-[#09090b]/85 max-w-[280px]"
+            >
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span className="text-xs font-bold text-white tracking-wide font-sans capitalize line-clamp-1">
+                  {hoveredName}
+                </span>
+              </div>
+              {hoveredInfo?.mainFunction && (
+                <p className="text-[10px] text-white/60 leading-relaxed italic border-t border-white/5 pt-1.5 font-medium">
+                  "{hoveredInfo.mainFunction}"
+                </p>
+              )}
+              <div className="text-[8px] uppercase tracking-widest text-white/30 font-semibold font-mono mt-0.5">
+                Click to explore parts in detail
+              </div>
+            </motion.div>
+          );
+        })()}
       </AnimatePresence>
     </div>
   );

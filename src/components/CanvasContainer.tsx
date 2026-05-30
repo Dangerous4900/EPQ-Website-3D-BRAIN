@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { Environment, CameraControls, Preload } from '@react-three/drei';
-import { Suspense, useRef, useEffect } from 'react';
+import { Suspense, useRef, useEffect, useState } from 'react';
 import { BrainModel } from './BrainModel';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useStore } from '../store/useStore';
@@ -61,6 +61,21 @@ function CameraController() {
 
 export function CanvasContainer({ transparent = false }: { transparent?: boolean }) {
   const { glassyMode } = useStore();
+  const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      setWebglSupported(!!gl);
+    } catch (e) {
+      setWebglSupported(false);
+    }
+  }, []);
+
+  if (webglSupported === false) {
+    throw new Error("Unable to create a WebGL context. AllowWebgl2:false or hardware limitations restrict context creation in this environment.");
+  }
 
   return (
     <Canvas
