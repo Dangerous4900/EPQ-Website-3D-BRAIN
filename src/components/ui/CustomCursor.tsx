@@ -1,8 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
+import { useStore } from '../../store/useStore';
 
 export function CustomCursor() {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const hoveredPart = useStore((state) => state.hoveredPart);
+  const activeHover = isHovered || !!hoveredPart;
   
   const cursorRef = useRef<HTMLDivElement>(null);
   
@@ -38,7 +41,7 @@ export function CustomCursor() {
       currentPos.current.y += (mousePos.current.y - currentPos.current.y) * ease;
       
       if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${currentPos.current.x}px, ${currentPos.current.y}px, 0) scale(${isHovered ? 1.4 : 1})`;
+        cursorRef.current.style.transform = `translate3d(${currentPos.current.x}px, ${currentPos.current.y}px, 0) scale(${activeHover ? 1.4 : 1})`;
       }
       
       animationFrameId = requestAnimationFrame(render);
@@ -78,7 +81,7 @@ export function CustomCursor() {
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
     };
-  }, [isVisible, isHovered]);
+  }, [isVisible, isHovered, activeHover]);
 
   if (!isVisible) return null;
 
@@ -105,7 +108,7 @@ export function CustomCursor() {
         ref={cursorRef}
         className="fixed top-0 left-0 w-4 h-4 -ml-2 -mt-2 bg-white rounded-full pointer-events-none z-[10000] hidden md:block transition-shadow duration-300"
         style={{
-          boxShadow: isHovered 
+          boxShadow: activeHover 
             ? '0 0 16px 5px rgba(255, 255, 255, 0.95)' 
             : '0 0 10px 3px rgba(255, 255, 255, 0.92)'
         }}

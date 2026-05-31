@@ -522,10 +522,10 @@ export function BrainExplorerUI() {
   const partInfo = partSetting ? getPartInfo(partSetting.customName) : null;
 
   return (
-    <div className="fixed inset-0 z-40 pointer-events-none flex flex-col justify-between p-6 md:p-12">
+    <div className="fixed inset-0 z-40 pointer-events-none flex flex-col justify-between pt-24 pb-6 px-6 md:pt-28 md:pb-12 md:px-12">
       
       {/* Minimize/Maximize Button */}
-      <div className="absolute top-6 right-6 md:right-12 pointer-events-auto z-[60]">
+      <div className="absolute top-24 md:top-28 right-6 md:right-12 pointer-events-auto z-[60]">
         <button
           onClick={() => setIsUIMinimized(!isUIMinimized)}
           className="p-3 rounded-full glass-panel border border-white/20 text-white/70 hover:text-white hover:bg-white/10 transition-all shadow-lg"
@@ -804,7 +804,7 @@ export function BrainExplorerUI() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="absolute top-24 left-6 md:left-12 bottom-6 w-80 glass-panel flex flex-col overflow-hidden pointer-events-auto z-50"
+            className="absolute top-24 md:top-28 left-6 md:left-12 bottom-6 w-80 glass-panel flex flex-col overflow-hidden pointer-events-auto z-50"
           >
             <div className="p-4 border-b border-white/10 flex justify-between items-center bg-black/40">
               <h3 className="font-semibold">Parts</h3>
@@ -891,7 +891,7 @@ export function BrainExplorerUI() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="absolute top-24 left-6 md:left-12 bottom-6 w-80 glass-panel flex flex-col overflow-hidden pointer-events-auto z-50"
+            className="absolute top-24 md:top-28 left-6 md:left-12 bottom-6 w-80 glass-panel flex flex-col overflow-hidden pointer-events-auto z-50"
           >
             <div className="p-4 border-b border-white/10 flex justify-between items-center bg-black/40">
               <h3 className="font-semibold">Brain Regions</h3>

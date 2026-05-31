@@ -24,6 +24,34 @@
   .glass-button {
     @apply bg-glass-bg border border-glass-border backdrop-blur-sm rounded-full px-6 py-3 transition-all duration-300 hover:bg-glass-highlight hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)];
   }
+  
+  @keyframes spin-slow {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 50s linear infinite;
+  }
+
+  @keyframes gradient-pulse {
+    0% {
+      opacity: 0.35;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    50% {
+      opacity: 0.65;
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+    100% {
+      opacity: 0.35;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+  }
+
+  .animate-gradient-pulse {
+    animation: gradient-pulse 16s ease-in-out infinite;
+  }
 }
 
 /* Hide scrollbar for cleaner look */

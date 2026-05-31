@@ -504,8 +504,8 @@ function BrainPartWrapper({
             mat.emissive.set('#8b7355');
             mat.color.set('#b8956e'); // bronze gold focus for outer lobes
           } else {
-            mat.emissive.set('#4d2600');
-            mat.color.set('#8B5A2B'); // rich warm brown for selected inner parts
+            mat.emissive.set('#4d3b2b');
+            mat.color.set('#c9a882'); // same as hover effect color (elegant gold/tan bronze) for selected inner parts
           }
           mat.opacity = 1;
           mat.wireframe = false;
