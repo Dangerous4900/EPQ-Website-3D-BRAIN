@@ -54,17 +54,6 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
                 By engineering a custom real-time WebGL slicing pipeline, our platform empowers scholars to perform virtual sagittal, horizontal, and coronal craniotomies inside the browser. Users can observe how subcortical regions (such as the thalamus and caudate nucleus) interact with external cranial structures without sacrificing physical context.
               </p>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-white/5">
-              <div className="space-y-2">
-                <span className="text-[10px] uppercase font-mono tracking-widest text-white/40 font-semibold">Study Domain</span>
-                <p className="text-xs text-white/80 font-medium">Subcortical Neuroscience & Spatial Pedagogy</p>
-              </div>
-              <div className="space-y-2">
-                <span className="text-[10px] uppercase font-mono tracking-widest text-white/40 font-semibold">Target Audience</span>
-                <p className="text-xs text-white/80 font-medium">Medical Students & Cognitive Biologists</p>
-              </div>
-            </div>
           </div>
 
           {/* Interactive Isolation & Regions Highlight */}
@@ -195,6 +184,46 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
             It took about a week each day over several months to complete the EPQ, totaling roughly 170 hours. I used hundreds of iterative prompts, learned the fundamentals of WebGL and web hosting, gathered and manually renamed 3D assets, and integrated them into a working website. The process was painstaking but rewarding — I gained practical skills in 3D asset management, graphics programming, deployment, and problem‑solving, and finished with a functional, well‑documented project that significantly expanded my technical toolkit.
           </p>
         </div>
+      </motion.div>
+
+      {/* References Box (Full-width reflective glass-panel container) */}
+      <motion.div 
+        variants={itemVariants} 
+        className="w-full relative mt-8 overflow-hidden"
+      >
+        <div className="glass-panel p-8 md:p-12 border border-white/10 bg-[#0c0c0e]/30 backdrop-blur-[24px] rounded-2xl shadow-xl relative text-left space-y-6">
+          <div className="flex items-center gap-2.5">
+            <div className="h-5 w-1 bg-white/60 rounded-full" />
+            <h4 className="text-base font-light tracking-wider text-white uppercase font-sans">References</h4>
+          </div>
+          
+          <ul className="space-y-4 text-xs md:text-sm text-white/70 font-light leading-relaxed font-sans">
+            <li className="pl-4 border-l border-white/10 space-y-1">
+              <span className="text-white font-medium">Neurotorium.</span> (n.d.). 3D Brain Atlas. [online] Available at: <a href="https://neurotorium.org/tool/brain-atlas/" target="_blank" referrerPolicy="no-referrer" rel="noopener noreferrer" className="text-white/90 hover:underline">https://neurotorium.org/tool/brain-atlas/</a>.
+              <p className="text-[11px] text-white/40 font-mono">— Resource used for acquiring and accurately referencing 3D brain asset mappings.</p>
+            </li>
+            <li className="pl-4 border-l border-white/10 space-y-1">
+              <span className="text-white font-medium">Seung, S.</span> (2013). <span className="italic font-normal">Connectome: how the brain’s wiring makes us who we are.</span> London: Penguin.
+              <p className="text-[11px] text-white/40 font-mono">— Inspired me to diverge from a traditional written research dissertation and build this interactive web artifact instead.</p>
+            </li>
+            <li className="pl-4 border-l border-white/10 space-y-1">
+              <span className="text-white font-medium">Framer - A lightning fast interactive design tool</span> (2019). Framer - A lightning fast interactive design tool. [online] Framer.com. Available at: <a href="https://www.framer.com/" target="_blank" referrerPolicy="no-referrer" rel="noopener noreferrer" className="text-white/90 hover:underline">https://www.framer.com/</a>.
+              <p className="text-[11px] text-white/40 font-mono">— Practical resource that taught me spatial UI relationships, layout choreography, and motion pacing.</p>
+            </li>
+            <li className="pl-4 border-l border-white/10 space-y-1">
+              <span className="text-white font-medium">Tartarotti, E.</span> (2026). <span className="italic font-normal">The 7 Levels of Tech Design.</span> Enrico Tartarotti. Available at: <a href="https://youtu.be/FQVRfadJkJk?si=EubMO7SPWFngIXe6" target="_blank" referrerPolicy="no-referrer" rel="noopener noreferrer" className="text-white/90 hover:underline">https://youtu.be/FQVRfadJkJk?si=EubMO7SPWFngIXe6</a> [Accessed 31 May 2026].
+              <p className="text-[11px] text-white/40 font-mono">— Strongly inspired the high-contrast aesthetic, deep carbon glass-morphism overlays, and physical-transmission UI styling.</p>
+            </li>
+          </ul>
+        </div>
+      </motion.div>
+
+      {/* System Footer Label - Prominently positioned and comfortably padded at the bottom */}
+      <motion.div 
+        variants={itemVariants} 
+        className="text-center text-[10px] text-white/40 uppercase tracking-[0.25em] font-mono flex items-center justify-center gap-2 border-t border-white/10 pt-12 pb-8 mt-12 w-full"
+      >
+        S50839 EPQ PROJECT 2025-2026 • I USE ARCH BTW V4.90
       </motion.div>
     </motion.div>
   );

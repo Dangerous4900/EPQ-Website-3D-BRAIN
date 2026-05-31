@@ -293,6 +293,13 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </motion.div>
 
+      {/* System Footer Label - Visible at the bottom of the Home tab */}
+      <motion.div 
+        variants={heroItemVariants} 
+        className="text-center text-[10px] text-white/40 uppercase tracking-[0.25em] font-mono flex items-center justify-center gap-2 border-t border-white/10 pt-12 pb-8 mt-12 w-full"
+      >
+        S50839 EPQ PROJECT 2025-2026 • I USE ARCH BTW V4.90
+      </motion.div>
     </motion.div>
   );
 }
