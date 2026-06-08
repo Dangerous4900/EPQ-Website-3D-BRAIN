@@ -127,7 +127,7 @@ export class CanvasErrorBoundary extends Component<Props, State> {
 
             {/* Subtle Brain Outline Graphic fallback */}
             <div className="pt-2 text-center text-[10px] font-mono text-white/30 tracking-widest">
-              EPQ-3D-BRAIN VISUALIZER PIPELINE
+              3D-BRAIN VISUALIZER PIPELINE
             </div>
           </div>
         </div>

@@ -30,7 +30,7 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
           ACADEMIC PROJECT DISCOURSE
         </div>
         <h1 className="text-4xl md:text-6xl font-serif tracking-tight text-white">
-          About <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/40">EPQ-3D-BRAIN</span>
+          About <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/40">3D-BRAIN</span>
         </h1>
         <p className="text-sm md:text-base text-white/60 leading-relaxed font-light">
           A high-fidelity neuroscience platform built to examine structural brain topology, custom glioblastoma mapping, and subcortical network isolation. Developed for the Extended Project Qualification (EPQ).

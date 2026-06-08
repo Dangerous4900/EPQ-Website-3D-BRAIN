@@ -67,7 +67,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       {/* High-Concept Brand Header */}
       <motion.div variants={heroItemVariants} className="text-center max-w-4xl mx-auto space-y-6 pt-10">
         <h1 className="text-5xl md:text-8xl font-normal tracking-tight leading-none text-white font-sans uppercase">
-          EPQ-3D-<span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/20 font-bold">BRAIN</span>
+          3D-<span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/20 font-bold">BRAIN</span>
         </h1>
         
         <p className="text-base md:text-lg font-light text-white/70 max-w-3xl mx-auto leading-relaxed">

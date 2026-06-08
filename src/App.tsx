@@ -99,7 +99,7 @@ export default function App() {
               className="flex items-center hover:opacity-80 transition-all text-left font-sans cursor-pointer"
             >
               <div>
-                <span className="text-lg font-normal tracking-wide text-white">EPQ-3D-BRAIN</span>
+                <span className="text-lg font-normal tracking-wide text-white">3D-BRAIN</span>
               </div>
             </button>
 
